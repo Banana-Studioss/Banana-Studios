@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Banana Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #16140F;
+    --bg-raised: #1F1B14;
+    --card: #241E15;
+    --peel: #F5C518;
+    --peel-dark: #D9A70F;
+    --bruise: #3A2E1F;
+    --ink: #F2EFE6;
+    --ink-dim: #B8AF9C;
+    --leaf: #7C9A3C;
+    --leaf-dim: #5C7429;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    line-height: 1.5;
+  }
+
+  ::selection { background: var(--peel); color: var(--bg); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .display {
+    font-family: 'Archivo Black', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+  }
+
+  .mono {
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ---------- NAV ---------- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(22,20,15,0.9), transparent);
+  }
+
+  .nav-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+  }
+
+  .nav-mark .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--peel);
+    transform: rotate(45deg);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links a {
+    position: relative;
+    color: var(--ink-dim);
+    transition: color 0.2s ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible { color: var(--peel); }
+  .nav-links a:focus-visible { outline: 2px solid var(--peel); outline-offset: 4px; }
+
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    nav { padding: 20px 24px; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    overflow: hidden;
+  }
+
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fade-up 0.7s ease 0.1s forwards;
+  }
+
+  /* The signature: peel-reveal headline */
+  .hero-title {
+    font-size: clamp(52px, 10vw, 120px);
+    line-height: 0.95;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fade-up 0.7s ease 0.3s forwards;
+  }
+
+  .hero-title .accent { color: var(--peel); }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-sub {
+    max-width: 560px;
+    color: var(--ink-dim);
+    font-size: 18px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fade-up 0.7s ease 0.5s forwards;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    opacity: 0;
+    animation: fade-up 0.7s ease 0.7s forwards;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 14px 28px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .btn:focus-visible { outline: 2px solid var(--peel); outline-offset: 3px; }
+
+  .btn-primary {
+    background: var(--peel);
+    color: var(--bg);
+  }
+  .btn-primary:hover { background: var(--peel-dark); }
+
+  .btn-ghost {
+    border-color: var(--bruise);
+    color: var(--ink);
+  }
+  .btn-ghost:hover { border-color: var(--peel); color: var(--peel); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section { padding: 120px 48px; position: relative; }
+  @media (max-width: 720px) { section { padding: 80px 24px; } }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 56px;
+    max-width: 1180px;
+    margin-inline: auto;
+    flex-wrap: wrap;
+  }
+
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--leaf);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    max-width: 640px;
+  }
+
+  /* ---------- FEATURED GAME ---------- */
+  .featured {
+    background: var(--bg-raised);
+    border-top: 1px solid var(--bruise);
+    border-bottom: 1px solid var(--bruise);
+  }
+
+  .featured-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .featured-grid { grid-template-columns: 1fr; }
+  }
+
+  .featured-art {
+    aspect-ratio: 4/3;
+    border-radius: 10px;
+    background: linear-gradient(155deg, var(--peel) 0%, var(--leaf) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .featured-art span {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 64px;
+    color: var(--bg);
+  }
+
+  .featured-copy p {
+    color: var(--ink-dim);
+    margin-bottom: 28px;
+    max-width: 460px;
+  }
+
+  .featured-copy h2 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 16px; }
+
+  /* ---------- GAMES ---------- */
+  .games-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+
+  @media (max-width: 900px) {
+    .games-grid { grid-template-columns: 1fr; }
+  }
+
+  .game-card {
+    background: var(--card);
+    border: 1px solid var(--bruise);
+    border-radius: 8px;
+    padding: 32px 28px;
+    transition: border-color 0.2s ease;
+  }
+
+  .game-card:hover {
+    border-color: var(--peel-dark);
+  }
+
+  .game-swatch {
+    width: 40px; height: 40px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 16px;
+    color: var(--bg);
+  }
+
+  .game-card h3 { font-size: 22px; margin-bottom: 10px; }
+  .game-card p { color: var(--ink-dim); font-size: 14.5px; margin-bottom: 20px; }
+
+  .game-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--leaf);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .game-status::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--leaf);
+  }
+
+  /* ---------- FOOTER / CTA ---------- */
+  footer {
+    padding: 100px 48px 48px;
+    text-align: center;
+    background: var(--bg-raised);
+    border-top: 1px solid var(--bruise);
+  }
+
+  footer h2 {
+    font-size: clamp(28px, 5vw, 52px);
+    margin-bottom: 20px;
+  }
+
+  footer p.foot-sub {
+    color: var(--ink-dim);
+    margin-bottom: 36px;
+  }
+
+  .foot-links {
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--bruise);
+    font-family: 'Space Mono', monospace;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+  }
+
+  .foot-social { display: flex; gap: 24px; }
+  .foot-social a:hover, .foot-social a:focus-visible { color: var(--peel); }
+  .foot-social a:focus-visible { outline: 2px solid var(--peel); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark"><span class="dot"></span> Banana Studios</div>
+  <div class="nav-links">
+    <a href="#games">Games</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <p class="eyebrow">An independent games studio</p>
+
+  <h1 class="hero-title display">Banana<br><span class="accent">Studios</span></h1>
+
+  <p class="hero-sub">We make games we'd want to play ourselves — a little strange, a little physical, always polished.</p>
+
+  <div class="hero-cta">
+    <a href="#games" class="btn btn-primary">See our games</a>
+    <a href="#contact" class="btn btn-ghost">Get in touch</a>
+  </div>
+</section>
+
+<section class="featured">
+  <div class="featured-grid">
+    <div class="featured-art"><span>O</span></div>
+    <div class="featured-copy">
+      <p class="section-tag">Now in development</p>
+      <h2 class="display">Orchard Run</h2>
+      <p>A procedurally generated platformer where every level is grown, not placed. Plant a seed, watch a level sprout, and run it before it wilts.</p>
+      <a href="#games" class="btn btn-primary">More about our games</a>
+    </div>
+  </div>
+</section>
+
+<section id="games">
+  <div class="section-head">
+    <div>
+      <p class="section-tag">The Games</p>
+      <h2 class="section-title display">What we're building</h2>
+    </div>
+  </div>
+
+  <div class="games-grid" id="games-grid" data-loaded="false">
+    <div class="game-card">
+      <div class="game-swatch" style="background:var(--peel);">O</div>
+      <h3>Orchard Run</h3>
+      <p>A procedurally generated platformer where every level is grown, not placed.</p>
+      <span class="game-status">In development</span>
+    </div>
+    <div class="game-card">
+      <div class="game-swatch" style="background:var(--leaf);">P</div>
+      <h3>Peel Back</h3>
+      <p>A top-down puzzle game about unwrapping layered environments to find what's hidden underneath.</p>
+      <span class="game-status">In development</span>
+    </div>
+    <div class="game-card">
+      <div class="game-swatch" style="background:#E5533D;">B</div>
+      <h3>Bunch</h3>
+      <p>Local co-op chaos for up to four players. Simple rules, loud arguments.</p>
+      <span class="game-status">Prototyping</span>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <h2 class="display">Let's build<br>something ripe.</h2>
+  <p class="foot-sub">Playtesters and collaborators welcome.</p>
+  <a href="mailto:bananatophat@outlook.com" class="btn btn-primary">bananatophat@outlook.com</a>
+
+  <div class="foot-links">
+    <span>&copy; 2026 Banana Studios</span>
+    <div class="foot-social">
+      <a href="#">Twitter</a>
+      <a href="#">Discord</a>
+      <a href="#">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // relay.txt holds the current Cloudflare Tunnel URL (just the raw URL,
+  // e.g. https://xyz.trycloudflare.com). Update it whenever the local
+  // server/tunnel resets — the page will pick up the new URL automatically.
+  const RELAY_URL = 'https://raw.githubusercontent.com/Banana-Studioss/Banana-Studios/main/relay.txt';
+
+  const SWATCH_COLORS = ['var(--peel)', 'var(--leaf)', '#E5533D', '#7EC8E3', '#E599F7'];
+
+  function initial(title) {
+    return (title || '?').trim().charAt(0).toUpperCase();
+  }
+
+  function renderGames(games) {
+    const grid = document.getElementById('games-grid');
+    if (!games || games.length === 0) return; // keep static fallback cards
+
+    grid.innerHTML = games.map((g, i) => `
+      <div class="game-card">
+        <div class="game-swatch" style="background:${SWATCH_COLORS[i % SWATCH_COLORS.length]};">${initial(g.title)}</div>
+        <h3>${g.title}</h3>
+        <p>${g.shortText || 'Playable now on itch.io.'}</p>
+        <a href="${g.url}" class="game-status" style="text-decoration:none;" target="_blank" rel="noopener">Play on itch.io</a>
+      </div>
+    `).join('');
+    grid.dataset.loaded = 'true';
+  }
+
+  async function getRelayBase() {
+    // Cache-bust so GitHub's raw CDN doesn't serve a stale URL right
+    // after you update relay.txt.
+    const res = await fetch(`${RELAY_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`relay.txt fetch failed: ${res.status}`);
+    const text = (await res.text()).trim();
+    if (!/^https?:\/\//.test(text)) throw new Error('relay.txt did not contain a valid URL');
+    return text.replace(/\/+$/, ''); // strip trailing slash
+  }
+
+  async function loadGames() {
+    try {
+      const base = await getRelayBase();
+      const res = await fetch(`${base}/api/games`);
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      const data = await res.json();
+      renderGames(data.games);
+    } catch (err) {
+      // Server/tunnel down or relay.txt stale — static fallback cards stay as-is.
+      console.warn('Could not load live games, showing static list instead:', err);
+    }
+  }
+
+  loadGames();
+</script>
+
+</body>
+</html>
